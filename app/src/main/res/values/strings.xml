@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WeatherEmbrio</string>
+    <string name="temp">%1$.0f°ᶜ</string>
+    <string name="tempItem">%1$.0f</string>
+    <string name="temp_max_min">%1$.0f°C / %2$.0f°C</string>
+    <string name="singapore">Singapore</string>
+</resources>

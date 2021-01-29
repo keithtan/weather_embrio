@@ -1,5 +1,7 @@
 # Weather Forecast Application
 
+Design based on : https://www.pinterest.com/pin/515028907386711853/
+
 Instructions to run project:
 1. Install Android Studio
 2. Pull code from repository

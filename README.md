@@ -1,4 +1,4 @@
-# weather_embrio
+# Weather Forecast Application
 
 Instructions to run project:
 1. Install Android Studio
@@ -7,7 +7,7 @@ Instructions to run project:
 4. Retrieve API key from OpenWeatherAPI and paste it into a file 'apikey.properties'
 3. Press Run 'app'
 
-Items for improvement
+Items for improvement:
 1. Add weather for other cities
 2. Improve UI
 3. Include necessary signing configurations

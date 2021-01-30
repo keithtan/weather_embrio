@@ -1,5 +1,7 @@
 package com.example.weatherembrio.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import com.example.weatherembrio.db.ForecastDatabase
 import com.example.weatherembrio.db.ForecastItem
 import com.example.weatherembrio.network.ForecastItemDto
@@ -11,8 +13,8 @@ import kotlinx.coroutines.withContext
 
 class OpenWeatherRepository(private val database: ForecastDatabase) {
 
-    fun getForecastFlow(): Flow<List<ForecastItem>> = flow {
-        emit(database.forecastDao().forecast())
+    fun getForecastFlow(): LiveData<List<ForecastItem>>  {
+        return database.forecastDao().forecast()
     }
 
     suspend fun refreshForecast() {

@@ -31,7 +31,7 @@ class ForecastFragment : Fragment() {
         val adapter = ForecastItemAdapter()
         binding.recyclerView.adapter = adapter
 
-        viewModel.forecastItemList2.observe(viewLifecycleOwner) {
+        viewModel.forecastItemListDropped.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
 

@@ -2,13 +2,13 @@ package com.example.weatherembrio.forecast
 
 import android.app.Application
 import android.graphics.Color
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.example.weatherembrio.data.OpenWeatherRepository
 import com.example.weatherembrio.db.ForecastDatabase
 import com.example.weatherembrio.db.ForecastItem
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,38 +26,29 @@ class ForecastViewModel constructor(
         }
     }
 
-    private val forecastItemList: Flow<List<ForecastItem>> = repository.getForecastFlow()
-        .catch {
-            emit(emptyList())
-        }
+    private val forecastItemList: LiveData<List<ForecastItem>> = repository.getForecastFlow()
 
-    val forecastItemList2: LiveData<List<ForecastItem>> = liveData {
-        forecastItemList.collect { value ->
-            val rest = value.drop(1)
-            emit(rest)
-        }
+
+    val forecastItemListDropped: LiveData<List<ForecastItem>> = forecastItemList.map { value ->
+        value.drop(1)
     }
 
-    val current: LiveData<ForecastItem?> = liveData {
-        forecastItemList.collect { value ->
-            if (value.isEmpty()) emit(null)
-            else emit(value[0])
-        }
+    val current: LiveData<ForecastItem?> = forecastItemList.map { value ->
+        if (value.isEmpty()) null
+        else value[0]
     }
 
-    val background: LiveData<Int?> = liveData {
-        forecastItemList.collect { value ->
-            if (value.isEmpty()) emit(null)
-            else {
-                emit(when (value[0].main) {
-                    WeatherType.THUNDERSTORM.key -> Color.rgb(88,62,129)
-                    WeatherType.CLEAR.key -> Color.rgb(107,191,226)
-                    WeatherType.RAIN.key -> Color.rgb(77,142,222)
-                    WeatherType.CLOUDS.key -> Color.rgb(81,207,186)
-                    WeatherType.DRIZZLE.key -> Color.rgb(107,191,226)
-                    WeatherType.SNOW.key -> Color.rgb(217,247,247)
-                    else -> 0
-                })
+    val background: LiveData<Int?> = forecastItemList.map { value ->
+        if (value.isEmpty()) null
+        else {
+            when (value[0].main) {
+                WeatherType.THUNDERSTORM.key -> Color.rgb(88,62,129)
+                WeatherType.CLEAR.key -> Color.rgb(107,191,226)
+                WeatherType.RAIN.key -> Color.rgb(77,142,222)
+                WeatherType.CLOUDS.key -> Color.rgb(81,207,186)
+                WeatherType.DRIZZLE.key -> Color.rgb(107,191,226)
+                WeatherType.SNOW.key -> Color.rgb(217,247,247)
+                else -> 0
             }
         }
     }
